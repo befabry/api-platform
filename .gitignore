@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -10,5 +9,5 @@
 ###< symfony/framework-bundle ###
 
 ###> PHPStorm
-/.idea
+/.idea/*
 ###< PHPStorm
