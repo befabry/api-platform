@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource(
  *     collectionOperations={"get", "post"},
  *     itemOperations={
- *          "get"={"path"="/ilovecheeses/{id}"},
+ *          "get",
  *          "put",
  *          "delete"
  *     },
