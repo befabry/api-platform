@@ -29,13 +29,15 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *          "groups" = {"cheese_listing:write"},
  *          "swagger_definition_name": "Write"
  *     },
- *     shortName="cheese"
+ *     shortName="cheese",
+ *     attributes={
+ *          "pagination_items_per_page"=10
+ *     }
  * )
  * @ApiFilter(BooleanFilter::class, properties={"isPublished"})
  * @ApiFilter(SearchFilter::class, properties={"title": "partial", "description":"partial"})
  * @ApiFilter(RangeFilter::class, properties={"price"})
  * @ApiFilter(PropertyFilter::class)
- *
  *
  * @ORM\Entity(repositoryClass="App\Repository\CheeseListingRepository")
  */
