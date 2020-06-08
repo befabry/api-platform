@@ -66,15 +66,16 @@ class User implements UserInterface
     /**
      * @var string The username
      *
-     * @Groups({"user:read","user:write", "cheese_listing:item:get"})
+     * @Groups({"user:read","user:write", "cheese_listing:item:get", "cheese_listing:write"})
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank()
      */
     private $username;
 
     /**
-     * @Groups("user:read")
-     * @ORM\OneToMany(targetEntity=CheeseListing::class, mappedBy="owner")
+     * @Groups({"user:write", "user:read"})
+     * @ORM\OneToMany(targetEntity=CheeseListing::class, mappedBy="owner", cascade={"persist"})
+     * @Assert\Valid()
      */
     private $cheeseListings;
 
@@ -107,7 +108,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     /**
@@ -134,7 +135,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -176,6 +177,10 @@ class User implements UserInterface
         return $this->cheeseListings;
     }
 
+    /**
+     * @param CheeseListing $cheeseListing
+     * @return $this
+     */
     public function addCheeseListing(CheeseListing $cheeseListing): self
     {
         if (!$this->cheeseListings->contains($cheeseListing)) {
@@ -186,6 +191,10 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param CheeseListing $cheeseListing
+     * @return $this
+     */
     public function removeCheeseListing(CheeseListing $cheeseListing): self
     {
         if ($this->cheeseListings->contains($cheeseListing)) {
