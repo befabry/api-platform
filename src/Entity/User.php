@@ -5,7 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
-use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,24 +15,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
- *     normalizationContext={
- *          "groups" = {"user:read"},
- *     },
- *     denormalizationContext={
- *          "groups" = {"user:write"},
- *     },
+ *     normalizationContext={"groups"={"user:read"}},
+ *     denormalizationContext={"groups"={"user:write"}},
  * )
  * @ApiFilter(PropertyFilter::class)
- *
- * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
     /**
-     * @var integer The identifier
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -41,44 +33,35 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @var string The email
-     *
-     * @Groups({"user:read","user:write"})
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"user:read", "user:write"})
      * @Assert\NotBlank()
      * @Assert\Email()
      */
     private $email;
 
     /**
-     * @var array The roles
-     *
      * @ORM\Column(type="json")
      */
     private $roles = [];
 
     /**
-     * TODO This will be properly fixed later
-     *
      * @var string The hashed password
-     *
-     * @Groups({"user:write"})
      * @ORM\Column(type="string")
+     * @Groups({"user:write"})
      */
     private $password;
 
     /**
-     * @var string The username
-     *
-     * @Groups({"user:read","user:write", "cheese_listing:item:get", "cheese_listing:write"})
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Groups({"user:read", "user:write", "cheese_listing:item:get", "cheese_listing:write"})
      * @Assert\NotBlank()
      */
     private $username;
 
     /**
-     * @Groups({"user:write", "user:read"})
-     * @ORM\OneToMany(targetEntity=CheeseListing::class, mappedBy="owner", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CheeseListing", mappedBy="owner", cascade={"persist"}, orphanRemoval=true)
+     * @Groups({"user:read", "user:write"})
      * @Assert\Valid()
      */
     private $cheeseListings;
@@ -112,7 +95,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return (string) $this->username;
     }
 
     /**
@@ -139,7 +122,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -181,10 +164,6 @@ class User implements UserInterface
         return $this->cheeseListings;
     }
 
-    /**
-     * @param CheeseListing $cheeseListing
-     * @return $this
-     */
     public function addCheeseListing(CheeseListing $cheeseListing): self
     {
         if (!$this->cheeseListings->contains($cheeseListing)) {
@@ -195,10 +174,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @param CheeseListing $cheeseListing
-     * @return $this
-     */
     public function removeCheeseListing(CheeseListing $cheeseListing): self
     {
         if ($this->cheeseListings->contains($cheeseListing)) {

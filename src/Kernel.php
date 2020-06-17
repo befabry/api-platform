@@ -30,31 +30,14 @@ class Kernel extends BaseKernel
         return \dirname(__DIR__);
     }
 
-    public function getCacheDir()
-    {
-        if (in_array($this->environment, ['dev', 'test'])) {
-            return "{$this->getProjectDir()}/../var-logs/api-platform/var/{$this->environment}/cache";
-        }
-        return "{$this->getProjectDir()}/var/{$this->environment}/cache";
-    }
-
-    public function getLogDir()
-    {
-        if (in_array($this->environment, ['dev', 'test'])) {
-            return "{$this->getProjectDir()}/../var-logs/api-platform/var/{$this->environment}/log";
-        }
-        return "{$this->getProjectDir()}/var/{$this->environment}/log";
-    }
-
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
-        $container->setParameter('container.dumper.inline_class_loader', \PHP_VERSION_ID < 70400 || $this->debug);
-        $container->setParameter('container.dumper.inline_factories', true);
+        $container->setParameter('container.dumper.inline_class_loader', true);
         $confDir = $this->getProjectDir().'/config';
 
         $loader->load($confDir.'/{packages}/*'.self::CONFIG_EXTS, 'glob');
-        $loader->load($confDir.'/{packages}/'.$this->environment.'/*'.self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir.'/{packages}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}'.self::CONFIG_EXTS, 'glob');
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
@@ -63,7 +46,7 @@ class Kernel extends BaseKernel
     {
         $confDir = $this->getProjectDir().'/config';
 
-        $routes->import($confDir.'/{routes}/'.$this->environment.'/*'.self::CONFIG_EXTS, '/', 'glob');
+        $routes->import($confDir.'/{routes}/'.$this->environment.'/**/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}/*'.self::CONFIG_EXTS, '/', 'glob');
         $routes->import($confDir.'/{routes}'.self::CONFIG_EXTS, '/', 'glob');
     }
