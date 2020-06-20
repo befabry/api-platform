@@ -30,6 +30,22 @@ class Kernel extends BaseKernel
         return \dirname(__DIR__);
     }
 
+    public function getCacheDir()
+    {
+        if (in_array($this->environment, ['dev', 'test'])) {
+            return "{$this->getProjectDir()}/../var-logs/api-platform/var/{$this->environment}/cache";
+        }
+        return "{$this->getProjectDir()}/var/{$this->environment}/cache";
+    }
+
+    public function getLogDir()
+    {
+        if (in_array($this->environment, ['dev', 'test'])) {
+            return "{$this->getProjectDir()}/../var-logs/api-platform/var/{$this->environment}/log";
+        }
+        return "{$this->getProjectDir()}/var/{$this->environment}/log";
+    }
+
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
