@@ -17,6 +17,16 @@ security:
         main:
             anonymous: true
 
+            json_login:
+                check_path: app_login
+                username_path: email
+                password_path: password
+                # failure_handler: class
+                #for more control. Create a class that implements AuthenticationFailureHandlerInterface and put it here
+
+            logout:
+                path: app_logout
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

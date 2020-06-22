@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields={"username"})
  * @UniqueEntity(fields={"email"})
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="users")
+ * @ORM\Table(name="users") //Bug with PostgreSQL, the user is not escaped and it looks for the DB native users.
  */
 class User implements UserInterface
 {
