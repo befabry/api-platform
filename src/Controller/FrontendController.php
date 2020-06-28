@@ -13,6 +13,8 @@ class FrontendController extends AbstractController
 {
     /**
      * @Route("/")
+     * @param SerializerInterface $serializer
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function homepage(SerializerInterface $serializer)
     {
